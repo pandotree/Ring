@@ -1,0 +1,12 @@
+Please follow the following instructions:
+
+1) Make sure sql is installed on your local. When you configure sql, make sure you create a user called "root" that has no password.
+2) Install the SQL adapter for python by using "easy_install MySQL-python"
+3) SQL in as the root user and create a table called "ring"
+4) Call "python manage.py syncdb"
+5) Start a mysql session and use the ring database, and call "show tables." Make sure the api_* tables are present.
+
+Anytime you want to create a new application, call "python manage.py startapp <appname>" and make sure you go into Ring/settings.py to modify the INSTALLED-APPS function by adding your app at the bottom.
+
+Let me know if you guys have any questions.
+-Franklin
