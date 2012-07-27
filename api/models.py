@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.localflavor.us.forms import USPhoneNumberField
 from django.contrib.auth.models import User
 
 #Create models here
@@ -6,7 +7,12 @@ from django.contrib.auth.models import User
 class Users(models.Model):
 	user = models.OneToOneField(User)
 	university = models.CharField(max_length=32)
+<<<<<<< HEAD
   phone_number = us.models.PhoneNumberField()
+=======
+	# phone_number = USPhoneNuberField() #
+	phone_number = models.IntegerField()
+>>>>>>> 5cf074e6aeef47c71c47b195f18a97f0175a7df2
 
 class Groups(models.Model):
 	group_name = models.CharField(max_length=64)
@@ -15,8 +21,14 @@ class Groups(models.Model):
 	user_id = models.ManyToManyField(User, related_name="user_set")
 
 class Messages(models.Model):
+<<<<<<< HEAD
   sent = models.DateTimeField()
   subject = models.TextField() #Not sure if we should limit subject line with CharField
   content = models.TextField()
+=======
+	sent = models.DateTimeField()
+	subject = models.TextField() #Not sure if we should limit subject line with CharField
+	content = models.TextField()
+>>>>>>> 5cf074e6aeef47c71c47b195f18a97f0175a7df2
 
 #TODO VALIDATION
