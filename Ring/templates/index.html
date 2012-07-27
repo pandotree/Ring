@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strrict//EN"
+
+"http://w3.org/TR/xhtmll/DTD/xhtml1-strict.dtd">
+
+<html lang="EN" dir="ltr" xmls="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Ring: A Collaborative App</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
+                type="text/javascript"></script>
+        <script type="text/javascript"
+                    src="/static/fancybox/jquery.fancybox.pack.js?v=2.0.6"></script>
+        <link rel="stylesheet" type="text/css"
+                    href="/static/fancybox/jquery.fancybox.css?v=2.0.6" />
+        <script>
+            $(document).ready(function() {
+                $("a#signup").fancybox();
+            });
+        </script>
+    </head>
+
+    <body>
+        <div class="all">
+            Welcome to Ring, an app to make group projects less painful.
+            Click <a id="signup" href="#hidden"> here </a> to sign up!
+
+            <div id="hidden">
+                signup form
+            </div>
+        </div>
+    </body>
+</html>
