@@ -1,14 +1,15 @@
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#create-card').bind('submit', function(ev) {
+        $('#create-user').bind('submit', function(ev) {
             ev.preventDefault();
             card.createCard($(this).serialize());
         });
     });
 </script>
-<div class="fancybox-content" id="start-fancybox">
+
+<div class="fancybox-content" id="create-user">
     Create a card in 3 simple steps:<br/>
-    <form id="create-user-account">{% csrf_token %}
+    <form id="create-user-form">{% csrf_token %}
         <table>
             <tr><td>Email:</td><td><input type="text" name="email"></td></tr>
             <tr><td>Password:</td><td><input type="password" name="pw"></td></tr>
