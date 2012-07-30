@@ -98,6 +98,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfResponseMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
@@ -110,7 +111,7 @@ ROOT_URLCONF = 'Ring.urls'
 WSGI_APPLICATION = 'Ring.wsgi.application'
 
 TEMPLATE_DIRS = (
-    os.path.join(CURRENT_DIR,'templates'),
+    os.path.join(CURRENT_DIR,'templates')+'/',
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
