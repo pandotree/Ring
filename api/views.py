@@ -6,7 +6,8 @@ from django.http import HttpResponse, Http404, HttpResponseServerError, HttpResp
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
 
-import datetime, simplejson
+import datetime
+import json as simplejson
 
 def index(request):
     c = {}
