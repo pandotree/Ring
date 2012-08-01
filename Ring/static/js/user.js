@@ -4,6 +4,9 @@ user = {
     createUser: function(query){
         var ok = false;
 
+        console.debug(1);
+        console.debug(query);
+
         $.ajax('/create_user/',{
             type: 'post',
             data: query,
