@@ -6,6 +6,7 @@ from django.http import HttpResponse, Http404, HttpResponseServerError, HttpResp
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
 from django.http import HttpResponse
+from .models import Users 
 
 import datetime
 import json as simplejson
@@ -35,10 +36,10 @@ def create_user(request):
     if not pw == confirm_pw:
         return HttpResponseServerError("password does not match")
 
-    django_user = User(username=email,password=password)
-    ring_user = Users(user=django_user)
+    django_user = User(username=email, password=password, phone_number=1112223333)
+    #ring_user = Users(user=django_user) # what is the purpose of this line?
 
     response_json = simplejson.dumps({'email':email})
     #return HttpResponse(response_json, content_type="application/json")
-    return render_to_response('success.html',context_instance=RequestContext(request))
+    return render_to_response('success.html', context_instance=RequestContext(request))
     #return render_to_response('success.html',c)
