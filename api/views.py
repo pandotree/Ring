@@ -5,6 +5,7 @@ from django.template import RequestContext
 from django.http import HttpResponse, Http404, HttpResponseServerError, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
+from django.http import HttpResponse
 
 import datetime
 import json as simplejson
@@ -31,7 +32,7 @@ def create_user(request):
     pw = request.POST['pw']
     confirm_pw = request.POST['confirm_pw']
     """FIX LATER!!"""
-    if not pw is confirm_pw:
+    if not pw == confirm_pw:
         return HttpResponseServerError("password does not match")
 
     django_user = User(username=email,password=password)
