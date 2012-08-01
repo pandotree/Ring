@@ -1,6 +1,4 @@
 user = {
-    // default: first create a user
-
     createUser: function(query){
         var ok = false; 
 
