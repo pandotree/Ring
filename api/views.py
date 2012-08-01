@@ -36,7 +36,8 @@ def create_user(request):
     if not pw == confirm_pw:
         return HttpResponseServerError("password does not match")
 
-    django_user = User(username=email, password=password, phone_number=1112223333)
+    django_user = Users(username=email, password=password, phone_number=1112223333)
+    django_user.save()
     #ring_user = Users(user=django_user) # what is the purpose of this line?
 
     response_json = simplejson.dumps({'email':email})
