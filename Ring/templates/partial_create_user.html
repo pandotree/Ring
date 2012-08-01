@@ -2,7 +2,6 @@
     $(document).ready(function() {
         $('#create-user').bind('submit', function(ev) {
             ev.preventDefault();
-            console.debug('#create-user-form');
             user.createUser($('#create-user-form').serialize());
         });
     });

@@ -2,10 +2,7 @@ user = {
     // default: first create a user
 
     createUser: function(query){
-        var ok = false;
-
-        console.debug(1);
-        console.debug(query);
+        var ok = false; 
 
         $.ajax('/create_user/',{
             type: 'post',
