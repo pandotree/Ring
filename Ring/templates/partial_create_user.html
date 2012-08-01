@@ -2,6 +2,8 @@
     $(document).ready(function() {
         $('#create-user').bind('submit', function(ev) {
             ev.preventDefault();
+            console.debug(this);
+            console.debug($(this));
             user.createUser($(this).serialize());
         });
     });
