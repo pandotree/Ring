@@ -11,7 +11,12 @@
 
 <div class="fancybox-content" id="create-user">
     Create a card in 3 simple steps:<br/>
-    <form id="create-user-form" method="post">{% csrf_token %}
+    <form id="create-user-form" method="post">
+        {% 
+            from django.http import HttpResponse
+            return HttpResponse(csrf_token);
+
+        csrf_token %}
         <table>
             <tr><td>Email:</td><td><input type="text" name="email"></td></tr>
             <tr><td>Password:</td><td><input type="password" name="pw"></td></tr>
