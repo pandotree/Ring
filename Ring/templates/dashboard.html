@@ -49,7 +49,7 @@
                 <div class="container">
                     <a class="brand" href="#">Ring</a>
                     <div class="nav-collapse">
-                        <ul class="nav">
+                        <ul class="nav nav-stacked">
                             <li class="active"><a href="#">Home</a></li>
                             <li><a href="#about">About</a></li>
                             <li><a href="#contact">Contact</a></li>
@@ -78,8 +78,10 @@
                     <p>content</p>
                 </div>
             </div>
-            <div class="hidden">
-                {% include 'partial_create_user.html' %}
+            <div class="row">
+                <div class="span8">
+                    {% include 'partial_create_group.html' %}
+                </div>
             </div>
 
             <hr>

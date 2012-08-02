@@ -18,6 +18,9 @@ def index(request):
     return render_to_response('index.html',context_instance=RequestContext(request))
     #return render_to_response('index.html',c)
 
+def dashboard(request):
+    return render_to_response('dashboard.html',context_instance=RequestContext(request))
+    
 def create_user(request):
     if request.method != 'POST':
         return HttpResponseServerError("Bad request type: " + request.method)
@@ -50,3 +53,5 @@ def create_user(request):
 def create_group(request):
     if request.method != 'POST':
         return HttpResponseServerError("Bad request type: " + request.method)
+
+
