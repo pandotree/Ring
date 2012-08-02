@@ -7,6 +7,7 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns('',
     url(r'^/?$','api.views.index'),
     url(r'^create_user/?$','api.views.create_user'),
+    url(r'^create_group/?$','api.views.create_group'),
     # Examples:
     # url(r'^$', 'Ring.views.home', name='home'),
     # url(r'^Ring/', include('Ring.foo.urls')),

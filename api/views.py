@@ -46,3 +46,7 @@ def create_user(request):
     #return HttpResponse(response_json, content_type="application/json")
     return render_to_response('success.html', context_instance=RequestContext(request))
     #return render_to_response('success.html',c)
+
+def create_group(request):
+    if request.method != 'POST':
+        return HttpResponseServerError("Bad request type: " + request.method)
