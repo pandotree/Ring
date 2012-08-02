@@ -121,6 +121,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social_auth'
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -129,6 +130,14 @@ INSTALLED_APPS = (
     ###### put new projects below this line ######
     'api',
 )
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.google.GoogleOAuth2Backend',
+    'social_auth.backends.contrib.dropbox.DropboxBackend', #I'm just going to assume this is what it's called
+    'social_auth.backends.contrib.github.GithubBackend', #adding this in case we need it in the future.
+    'django.contrib.auth.backends.ModelBackend' #apparently necessary if we want our users to be able to log in.
+)
+
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
