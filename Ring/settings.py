@@ -137,7 +137,8 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend' #apparently necessary if we want our users to be able to log in.
 )
 
-
+GOOGLE_OAUTH2_CLIENT_ID = '878704975022.apps.googleusercontent.com'
+GOOGLE_OAUTH2_CLIENT_SECRET = 'Ajh9Cck5L6EKi_jVP3J2GyiA'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
