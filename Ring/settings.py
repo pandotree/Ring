@@ -137,12 +137,20 @@ AUTHENTICATION_BACKENDS = (
     'social_auth.backends.google.GoogleOAuth2Backend',
     'social_auth.backends.contrib.dropbox.DropboxBackend', #I'm just going to assume this is what it's called
     'social_auth.backends.contrib.github.GithubBackend', #adding this in case we need it in the future.
-    'django.contrib.auth.backends.ModelBackend' #apparently necessary if we want our users to be able to log in.
+    'django.contrib.auth.backends.ModelBackend', #apparently necessary if we want our users to be able to log in.
 )
-
+SOCIAL_AUTH_ENABLED_BACKENDS = ('google',)
 GOOGLE_OAUTH2_CLIENT_ID = '878704975022.apps.googleusercontent.com'
 GOOGLE_OAUTH2_CLIENT_SECRET = 'Ajh9Cck5L6EKi_jVP3J2GyiA'
 
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/authenticated/'
+LOGIN_ERROR_URL = '/login-error/'
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'social_auth.context_processors.social_auth_by_name_backends',
+)
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
