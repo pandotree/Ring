@@ -1,3 +1,4 @@
+#Testing to see if this is committed
 # Django settings for Ring project.
 import os
 

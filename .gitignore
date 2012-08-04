@@ -4,3 +4,4 @@
 *.swp
 local_settings.py
 .DS_Store
+settings.py
