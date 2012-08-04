@@ -19,7 +19,6 @@
         <!-- bootstrap -->
         <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css" />
         <link rel="stylesheet" href="../static/bootstrap/css/bootstrap-responsive.min.css" />
-        <link rel="text/javascript" href="../static/bootstrap/js/bootstrap-collapse.js" />
 
         <!-- ours -->
         <link rel="stylesheet" href="../static/css/base.css" />
@@ -49,48 +48,19 @@
             <div class="navbar-inner">
                 <div class="container">
                     <a class="brand" href="#">Ring</a>
-                    <div class="nav-collapse span9">
-                        <ul class="nav" class="pull-left">
-                            <li class="active"><a href="#">Home</a></li>
-                            <li><a href="#about">About</a></li>
-                            <li><a href="#contact">Contact</a></li>
-                        </ul>
-                    </div>
-
-                    {% include 'login_partial.html' %}
-
-                   <!--  <div class="nav-collapse">
-                        <ul class="nav" class="pull-right">
-                            <li><button class="btn" data-toggle="collapse" data-target="#create-user" id="sign-in">Sign in</a></button></li>
-                            <li><button class="btn" id="register-user">Register</button></li>
-                        </ul>
-                    </div> -->
-
                 </div>
             </div>
         </div>
+        <ul class="nav nav-tabs nav-stacked">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
         <div class="container">
-            <div class="hero-unit">
-                <h1>Welcome!</h1>
-                <p>Welcome to Ring, an app to make group projects less painful.</p>
-                <p>Click <a id="signup" href="#create-user"> here </a> to sign up!</p>
-            </div>
-<!--             <div class="row">
-                <div class="span4">
-                    <h2>Heading</h2>
-                    <p>content</p>
+            <div class="row">
+                <div class="span8">
+                    {% include 'group_partials.html' %}
                 </div>
-                <div class="span4">
-                    <h2>Heading</h2>
-                    <p>content</p>
-                </div>
-                  <div class="span4">
-                    <h2>Heading</h2>
-                    <p>content</p>
-                </div>
-            </div> -->
-            <div class="hidden">
-                {% include 'user_partials.html' %}
             </div>
 
             <hr>

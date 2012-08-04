@@ -1,23 +1,45 @@
 # Create your views here.
+from .models import Users
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
+from django.core.context_processors import csrf
+from django.http import HttpResponse, Http404, HttpResponseServerError, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template import RequestContext
-from django.http import HttpResponse, Http404, HttpResponseServerError, HttpResponseRedirect
-from django.contrib.auth.models import User
-from django.core.context_processors import csrf
-from django.http import HttpResponse
-from .models import Users
-from django.contrib.auth.models import User
-
+''''''
 import datetime
 import json as simplejson
 
 def index(request):
     c = {}
     c.update(csrf(request))
-    return render_to_response('index.html',context_instance=RequestContext(request))
-    #return render_to_response('index.html',c)
+    return render_to_response('index.html',context_instance=RequestContext(request)) #what does context_instance do?
 
+def sign_in(request):
+    if request.method != 'POST':
+        return HttpResponseServerError("Bad request type: " + request.method)
+
+    c = {}
+    c.update(csrf(request)) # how does django keep track of our csrf tokens?
+
+    username = request.POST['username']
+    pw = request.POST['pw']
+
+    user = authenticate(username=username, password=pw)
+    if user is not None: # what is the difference between None and null?
+        request.session.__setitem__('logged_in', True)
+        return HttpResponseRedirect("/dashboard/")
+
+    return render_to_response('index.html',context_instance=RequestContext(request)) #eventually update ui with js that tells user to try again
+
+
+def dashboard(request):
+    logged_in = request.session.get('logged_in', False)
+    if(not logged_in):
+        return HttpResponse("Please log in!") #find a partial that we can render, or maybe redirect to homepage
+    return render_to_response('dashboard.html',context_instance=RequestContext(request))
+    
 def create_user(request):
     if request.method != 'POST':
         return HttpResponseServerError("Bad request type: " + request.method)
@@ -43,6 +65,8 @@ def create_user(request):
     #ring_user = Users(user=django_user) # what is the purpose of this line?
 
     response_json = simplejson.dumps({'email':email})
-    #return HttpResponse(response_json, content_type="application/json")
     return render_to_response('success.html', context_instance=RequestContext(request))
-    #return render_to_response('success.html',c)
+
+def create_group(request):
+    if request.method != 'POST':
+        return HttpResponseServerError("Bad request type: " + request.method)
