@@ -29,7 +29,10 @@ def sign_in(request):
 
     user = authenticate(username=username, password=pw)
     if user is not None: # what is the difference between None and null?
+        user = User.objects.get(username=username)
+        user = Users.objects.get(user=user)
         request.session.__setitem__('logged_in', True)
+        request.session.__setitem__('user_id', user.user_id)
         return HttpResponseRedirect("/dashboard/")
 
     return render_to_response('index.html',context_instance=RequestContext(request)) #eventually update ui with js that tells user to try again
@@ -73,8 +76,9 @@ def create_group(request):
         return HttpResponseServerError("Bad request type: " + request.method)
 
     group_name = request.POST['group_name']
-    user = User.objects.get(pk=1)
+    user_id = request.session.get('user_id')
 
+    user = Users.objects.get(user_id=user_id)
     django_group = Groups(group_name=group_name)
     django_group.save()
     django_group.users.add(user)
