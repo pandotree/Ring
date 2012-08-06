@@ -9,7 +9,6 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.template import RequestContext
 ''''''
 import datetime
-import pytz
 import json as simplejson
 
 def index(request):
