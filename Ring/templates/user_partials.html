@@ -1,23 +1,10 @@
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#create-user').bind('submit', function(ev) {
-            ev.preventDefault();
-            user.createUser($('#create-user-form').serialize());
-        });
-    });
-    // $(document).ready(function() {
-    //     $('#login-user').bind('submit', function(ev) {
-    //         ev.preventDefault();
-    //         user.loginUser($('#login-user-form').serialize());
-    //     });
-    // });
 </script>
 <script type="text/javascript" src="static/js/ring.js"></script>
 <script type="text/javascript" src="static/js/util.js"></script>
 
 <div class="fancybox-content" id="create-user">
     Create a card in 3 simple steps:<br/>
-    <form id="create-user-form" method="post">{% csrf_token %}
+    <form id="create-user-form" method="post" action="create_user">{% csrf_token %}
         <table>
             <tr><td>Email:</td><td><input type="text" name="email"></td></tr>
             <tr><td>Password:</td><td><input type="password" name="pw"></td></tr>

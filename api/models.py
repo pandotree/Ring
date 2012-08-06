@@ -13,8 +13,8 @@ class Users(models.Model):
 class Groups(models.Model):
 	group_name = models.CharField(max_length=64)
 	group_id = models.AutoField(primary_key=True)
-	created = models.DateTimeField()
-	user_id = models.ManyToManyField(User, related_name="user_set")
+	created = models.DateTimeField(auto_now=True)
+	users = models.ManyToManyField(User, related_name="user_set")
 
 class Messages(models.Model):
 	sent = models.DateTimeField()

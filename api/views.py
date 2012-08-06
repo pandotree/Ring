@@ -1,5 +1,5 @@
 # Create your views here.
-from .models import Users
+from .models import Users, Groups
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.template import RequestContext
 ''''''
 import datetime
+import pytz
 import json as simplejson
 
 def index(request):
@@ -70,3 +71,12 @@ def create_user(request):
 def create_group(request):
     if request.method != 'POST':
         return HttpResponseServerError("Bad request type: " + request.method)
+
+    group_name = request.POST['group_name']
+    user = User.objects.get(pk=1)
+
+    django_group = Groups(group_name=group_name)
+    django_group.save()
+    django_group.users.add(user)
+
+    return render_to_response('success.html', context_instance=RequestContext(request))
