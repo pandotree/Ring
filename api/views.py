@@ -1,4 +1,5 @@
 # Create your views here.
+import httplib2
 from .models import Users
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
@@ -10,6 +11,14 @@ from django.template import RequestContext
 ''''''
 import datetime
 import json as simplejson
+import social_auth.backends.google as google_auth
+
+from social_auth import __version__ as version
+from apiclient.discovery import build
+from oauth2client.client import OAuth2Credentials
+from oauth2client.client import AccessTokenCredentials
+from social_auth.models import UserSocialAuth
+from pprint import pprint
 
 def index(request):
     c = {}
@@ -70,3 +79,26 @@ def create_user(request):
 def create_group(request):
     if request.method != 'POST':
         return HttpResponseServerError("Bad request type: " + request.method)
+
+def show_docs(request):
+    if request.method != 'GET':
+        return HttpResponseServerError("Bad request type: " + request.method)
+    http = httplib2.Http()
+    instance = UserSocialAuth.objects.filter(provider='google-oauth2').get(user=request.user)
+
+    token = instance.tokens['access_token']
+    useragent = request.META['HTTP_USER_AGENT']
+    credentials = AccessTokenCredentials(token, useragent)
+    http = credentials.authorize(http)
+    service = build('drive', 'v2', http=http)
+    apirequest = service.files().list()
+    while apirequest != None:
+        response = apirequest.execute()
+        for file in response.get('items', []):
+            print repr(file.get('title')) + '\n'
+        apirequest = service.files().list_next(apirequest, response)
+    ctx = {
+        'files': files
+    }
+    return render_to_response('documents.html', ctx, RequestContext(request))
+
