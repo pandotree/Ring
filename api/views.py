@@ -1,10 +1,7 @@
 # Create your views here.
-<<<<<<< HEAD
+
 import httplib2
-from .models import Users
-=======
 from .models import Users, Groups
->>>>>>> dad49fa0e9e6cb48d8c8e9290ea7ea5385e5ac3b
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
