@@ -1,67 +1,33 @@
-user = {
-    /*
-     TODO: decouple these methods and classes from the templates that are calling them. EX:
+/*
 
-    $('#BUTTON_NUM').click(function() {
+PLEASE USE THIS JAVASCRIPT CLICK FUNCTION AS A MODEL FOR FUTURE AJAX CALLS
+$('#login-user-submit').click(function () {
 
-        $.ajax('/create_user/',{
-            type: 'post',
-            data: query,
-            dataType: 'json',
-            success: function(data){
-                //ACTIONS?
-            },
-            error: handleAjaxError,
-        });
-    })
-    */
-
-    createUser: function(query){
-        var ok = false; 
-
-        $.ajax('/create_user/',{
-            type: 'post',
-            data: query,
-            dataType: 'json',
-            success: function(data){
-                ok = true;
-            },
-            error: handleAjaxError,
-        });
-        return ok;
-    },
-
-    loginUser: function(query){
-        var ok = false;
+        var url = '/login/';
+        console.debug($('#login-user-form').serialize());
         console.debug("trying to log in");
 
-        $.ajax('/login/', {
-            type: 'post',
-            data: query,
-            dataType: 'json',
-            success: function(data){
-                console.debug("logged in");
-                ok=true;
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: 'html',
+            data: $('#login-user-form').serialize(),
+            complete: function(xhr, textStatus) {
+                
             },
-            error: handleAjaxError,
-        });
-        return ok;
-    },
-};
-
-group = {
-    createGroup: function(query){
-        var ok = false; 
-
-        $.ajax('/create_group/',{
-            type: 'post',
-            data: query,
-            dataType: 'json',
-            success: function(data){
-                ok = true;
+            success: function(data) {
+                document.write(data);
             },
-            error: handleAjaxError,
+            error: function(xhr, textStatus, errorThrown){
+                console.debug(errorThrown);
+                console.debug(textStatus);
+                console.debug(xhr);
+                var e1 = 'Sorry! A server error occurred: \"'+errorThrown+'\"\.';
+                if(confirm(e1+'\n\n'+'View error?')){
+                    win = window.open();
+                    win.document.write(xhr.responseText);
+                }
+            },
         });
-        return ok;
-    },
-};
+    });
+*/

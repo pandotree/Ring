@@ -12,12 +12,6 @@
                 else $(this).find('span').html('&#x25BC;')
             })
     });
-    $(document).ready(function() {
-        $('#login-user').bind('submit', function(ev) {
-            ev.preventDefault();
-            user.loginUser($('#login-user-form').serialize());
-        });
-    });
 </script>
 
 <nav>
@@ -28,13 +22,13 @@
             </a>
             <div id="login-content"> 
             	<div id="login-user">
-                <form id="login-user-form" method="post">{% csrf_token %}
+                <form id="login-user-form" method="POST" action="sign_in">{% csrf_token %}
                     <fieldset id="inputs">
                         <input id="username" type="email" name="username" placeholder="Your email address" required>   
                         <input id="pw" type="password" name="pw" placeholder="Password" required>
                     </fieldset>
                     <fieldset id="actions">
-                        <input type="submit" id="submit" value="Log in">
+                        <input type="submit" id="login-user-submit" value="Log in">
                         <!-- <label><input type="checkbox" checked="checked"> Keep me signed in</label> -->
                     </fieldset>
                 </form>

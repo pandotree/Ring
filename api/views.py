@@ -1,6 +1,10 @@
 # Create your views here.
+<<<<<<< HEAD
 import httplib2
 from .models import Users
+=======
+from .models import Users, Groups
+>>>>>>> dad49fa0e9e6cb48d8c8e9290ea7ea5385e5ac3b
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
@@ -37,7 +41,10 @@ def sign_in(request):
 
     user = authenticate(username=username, password=pw)
     if user is not None: # what is the difference between None and null?
+        user = User.objects.get(username=username)
+        user = Users.objects.get(user=user)
         request.session.__setitem__('logged_in', True)
+        request.session.__setitem__('user_id', user.user_id)
         return HttpResponseRedirect("/dashboard/")
 
     return render_to_response('index.html',context_instance=RequestContext(request)) #eventually update ui with js that tells user to try again
@@ -80,6 +87,16 @@ def create_group(request):
     if request.method != 'POST':
         return HttpResponseServerError("Bad request type: " + request.method)
 
+    group_name = request.POST['group_name']
+    user_id = request.session.get('user_id')
+
+    user = Users.objects.get(user_id=user_id)
+    django_group = Groups(group_name=group_name)
+    django_group.save()
+    django_group.users.add(user)
+
+    return render_to_response('success.html', context_instance=RequestContext(request))
+
 def show_docs(request):
     if request.method != 'GET':
         return HttpResponseServerError("Bad request type: " + request.method)
@@ -101,4 +118,3 @@ def show_docs(request):
         'files': files
     }
     return render_to_response('documents.html', ctx, RequestContext(request))
-

@@ -7,9 +7,9 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns('',
     url(r'^/?$','api.views.index'),
     url(r'^dashboard/?$','api.views.dashboard'),
-    url(r'^login/?$','api.views.sign_in'),
+    url(r'^sign_in/?$','api.views.sign_in'),
     url(r'^create_user/?$','api.views.create_user'),
-    url(r'^create_group/?$','api.views.create_group'),
+    url(r'^dashboard/create_group/?$','api.views.create_group'),
     url(r'', include('social_auth.urls')),
     url(r'^authenticated/$', 'api.views.show_docs'),
     # Examples:
