@@ -1,0 +1,26 @@
+</script>
+<script type="text/javascript" src="static/js/ring.js"></script>
+<script type="text/javascript" src="static/js/util.js"></script>
+
+<div class="fancybox-content" id="create-user">
+    Create a card in 3 simple steps:<br/>
+    <form id="create-user-form" method="post" action="create_user">{% csrf_token %}
+        <table>
+            <tr><td>Email:</td><td><input type="text" name="email"></td></tr>
+            <tr><td>Password:</td><td><input type="password" name="pw"></td></tr>
+            <tr><td>Confirm Password:</td><td><input type="password" name="confirm_pw"></td></tr>
+        </table>
+        <p style="text-align:center;"><input type="submit" value="Create"></p>
+    </form>
+</div>
+
+<!-- <div class="fancybox-content" id="login-user">
+    Please enter your Login Credentials:<br/>
+    <form id="login-user-form" method="post">{% csrf_token %}
+        <table>
+            <tr><td>Username:</td><td><input type="text" name="username"></td></tr>
+            <tr><td>Password:</td><td><input type="password" name="pw"></td></tr>
+        </table>
+        <p style="text-align:center;"><input type="submit" value="Log In"></p>
+    </form>
+</div> -->

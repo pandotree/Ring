@@ -1,0 +1,42 @@
+<link rel="stylesheet" href="../static/css/login.css" />
+<script type="text/javascript" src="static/js/ring.js"></script>
+<script type="text/javascript" src="static/js/util.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $('#login-trigger').click(function(){
+            $(this).next('#login-content').slideToggle();
+            $(this).toggleClass('active');                  
+            
+            if ($(this).hasClass('active')) $(this).find('span').html('&#x25B2;')
+                else $(this).find('span').html('&#x25BC;')
+            })
+    });
+</script>
+
+<nav>
+    <ul>
+        <li id="login">
+            <a id="login-trigger" href="#">
+                Log in <span>▼</span>
+            </a>
+            <div id="login-content"> 
+            	<div id="login-user">
+                <form id="login-user-form" method="POST" action="sign_in">{% csrf_token %}
+                    <fieldset id="inputs">
+                        <input id="username" type="email" name="username" placeholder="Your email address" required>   
+                        <input id="pw" type="password" name="pw" placeholder="Password" required>
+                    </fieldset>
+                    <fieldset id="actions">
+                        <input type="submit" id="login-user-submit" value="Log in">
+                        <!-- <label><input type="checkbox" checked="checked"> Keep me signed in</label> -->
+                    </fieldset>
+                </form>
+            </div>
+            </div>               
+        </li>
+        <!-- <li id="signup">
+            <a href="">Register</a>
+        </li> -->
+    </ul>
+</nav>

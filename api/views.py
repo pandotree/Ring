@@ -7,8 +7,6 @@ from django.http import HttpResponse, Http404, HttpResponseServerError, HttpResp
 from django.shortcuts import render_to_response
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template import RequestContext
-''''''
-import datetime
 import json as simplejson
 
 def index(request):
@@ -41,7 +39,16 @@ def dashboard(request):
     logged_in = request.session.get('logged_in', False)
     if(not logged_in):
         return HttpResponse("Please log in!") #find a partial that we can render, or maybe redirect to homepage
-    return render_to_response('dashboard.html',context_instance=RequestContext(request))
+
+    django_user = User.objects.get(username=request.POST['username'])
+    ring_user = Users.objects.get(user=django_user)
+    groups = ring_user.groups_set.all()
+    if len(groups)==0:
+        return render_to_response('dashboard.html',{'uncreated':True},context_instance=RequestContext(request))
+    else:
+        data = [{'name':group.group_name} for group in groups]
+        response_json = simplejson.dumps(data)
+        return render_to_response('dashboard.html',{'uncreated':False,'groups':groups},context_instance=RequestContext(request))
     
 def create_user(request):
     if request.method != 'POST':
@@ -73,6 +80,8 @@ def create_user(request):
 def create_group(request):
     if request.method != 'POST':
         return HttpResponseServerError("Bad request type: " + request.method)
+    if 'group_name' not in request.POST:
+        return HttpResponseServerError("No 'group_name' in POST")
 
     group_name = request.POST['group_name']
     user_id = request.session.get('user_id')
