@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strrict//EN"
+
+"http://w3.org/TR/xhtmll/DTD/xhtml1-strict.dtd">
+
+<html lang="EN" dir="ltr" xmls="http://www.w3.org/1999/xhtml">
+    {% include '_head.html' %}
+    <body>
+        {% include '_menu.html' %}
+        {% include '_group-menu.html' %}
+        <div class="container">
+            <div class="row">
+                <div class="span8">
+                    <p> Hi there. Here's the name of the group you clicked on. <p>
+                    {{ group.group_name }}
+                    <strong><p> All members in your group</p></strong>
+                    <table>
+                        <tr>
+                            <td>Username</td>
+                            <td>University</td>
+                            <td>Cell</td>
+                            <td>Preferred Contact Method</td>
+                        </tr>
+                        {% for user in group.users.all %}
+                            <tr>
+                                <td> {{user.user.username}} </td>
+                                <td> {{user.university}} </td>
+                                <td> {{user.phone_number}} </td>
+                                <td> {{user.preferred_contact_method}} </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    <strong><p> Add a new user</p></strong>
+                    <form method="get" action="add_user_to_group"> <!--really hacky, change to a post form -->
+                        <input type="hidden" name="group_id" value={{group.group_id}}>
+                        <p>Enter the email address of the member you wish to add</p>
+                        <input type="text" name="new_member_email">
+                        <input type="submit" value="Add!">
+                    </form>
+                </div>
+            </div>
+            {% include '_footer.html' %}
+        </div>
+    </body>
+</html>

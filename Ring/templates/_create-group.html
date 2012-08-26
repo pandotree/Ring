@@ -1,11 +1,13 @@
 <div class="hero-unit" id="create-group">
-    <p> It doesn't look like you have any groups yet. Create one now! <br/> </p>
+    <p>Create a new group! </p>
     <form id="create-group-form" method="post" action="create_group">
-    	<!--- do we need a csrf_token when creating groups? --> {% csrf_token %}
+    	{% csrf_token %}
     	<input type="hidden" name="user_id" value="1">
         <table>
-            <tr><td>Group Name:</td><td><input type="text" name="group_name"></td></tr>
-            <!-- <tr><td>Add Users:</td><td><input type="text" name="users"></td></tr> -->
+            <tr>
+                <td>Group Name:</td>
+                <td><input type="text" name="group_name"></td>
+            </tr>
         </table>
         <p style="text-align:center;"><input type="submit" value="Create"></p>
     </form>

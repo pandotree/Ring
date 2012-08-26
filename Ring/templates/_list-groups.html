@@ -1,5 +1,21 @@
 <div>
-    {% for group in groups %} 
-        {{ group.name }} <br />
+    <table>
+    {% for group in groups %}
+        <tr>
+            <td>Group name</td>
+            <td>Time of creation</td>
+            <td>Group id</td>
+            <td>Group home page</td>
+        </tr>
+        <tr>
+            <td>{{ group.group_name }} </td>
+            <td>{{ group.created }} </td>
+            <td>{{ group.group_id }} </td>
+            <form method="get" action="group">
+            <input type="hidden" name="group_id" value={{group.group_id}}>
+            <td><input type="submit" value="Go to group home"></td>
+            </form>
+        </tr>
     {% endfor %}
+    </table>
 </div>

@@ -10,6 +10,8 @@ urlpatterns = patterns('',
     url(r'^sign_in/?$','api.views.sign_in'),
     url(r'^create_user/?$','api.views.create_user'),
     url(r'^create_group/?$','api.views.create_group'),
+    url(r'^dashboard/group?$','api.views.group'),
+    url(r'^dashboard/add_user_to_group?$','api.views.add_user_to_group'),
     url(r'', include('social_auth.urls')),
     url(r'^authenticated/$', 'api.views.show_docs'),
     # Examples:

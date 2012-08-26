@@ -5,33 +5,17 @@
 <html lang="EN" dir="ltr" xmls="http://www.w3.org/1999/xhtml">
     {% include '_head.html' %}
     <body>
-        <div class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="brand" href="#">Ring</a>
-                </div>
-            </div>
-        </div>
-        <div class="span2" />
-        <div class="span2">
-            <ul class="nav nav-tabs nav-stacked">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-             <li><a href="#contact">Contact</a></li>
-            </ul>
-        </div>
+        {% include '_menu.html' %}
         <div class="container">
             <div class="row">
                 <div class="span8">
-                    {% if uncreated %} {% include '_create-group.html' %} {% else %} {% include '_list-groups.html' %} {% endif %}
+                    {% if not uncreated %} {% include '_list-groups.html' %} 
+                    <!-- TODO: change variable name to group_created (cleaner than 'not uncreated') -->
+                    {% else %} <p> It doesn't look like you have any groups yet. Create one now! <br/> </p> {% endif %}
+                    {% include '_create-group.html' %}
                 </div>
             </div>
-
-            <hr>
-
-            <footer>
-                <p>&copy; Ring 2012</p>    
-            </footer>
+            {% include '_footer.html' %}
         </div>
     </body>
 </html>
