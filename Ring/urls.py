@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^create_user/?$','api.views.create_user'),
     url(r'^dashboard/create_group/?$','api.views.create_group'),
     url(r'', include('social_auth.urls')),
+    url(r'^authenticated/$', 'api.views.show_docs'),
     # Examples:
     # url(r'^$', 'Ring.views.home', name='home'),
     # url(r'^Ring/', include('Ring.foo.urls')),
