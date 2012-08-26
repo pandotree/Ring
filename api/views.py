@@ -35,24 +35,27 @@ def sign_in(request):
     pw = request.POST['pw']
 
     user = authenticate(username=username, password=pw)
-    if user is not None: # what is the difference between None and null?
-        user = User.objects.get(username=username)
-        user = Users.objects.get(user=user)
+    if user is not None: # what is the difference between None and null? # returns None if the password is invalid
+        try:
+            ring_user = Users.objects.get(user=user)
+        except Users.DoesNotExist: #potentially refactor to get_object_or_404 and catch the http404 exception
+            return HttpResponse("Oops, looks like you haven't created an account with us yet!") 
         request.session.__setitem__('logged_in', True)
-        request.session.__setitem__('user_id', user.user_id)
-        return HttpResponseRedirect("/dashboard/")
-
-    return render_to_response('index.html',context_instance=RequestContext(request)) #eventually update ui with js that tells user to try again
+        request.session.__setitem__('user_id', ring_user.user_id)
+        return dashboard(request)
+    else:
+        return HttpResponse('Your username and password were incorrect') #eventually update ui with js that tells user to try again
 
 
 def dashboard(request):
     logged_in = request.session.get('logged_in', False)
     if(not logged_in):
         return HttpResponse("Please log in!") #find a partial that we can render, or maybe redirect to homepage
-
+    print(request)
     django_user = User.objects.get(username=request.POST['username'])
     ring_user = Users.objects.get(user=django_user)
-    groups = ring_user.groups_set.all()
+
+    groups = ring_user.user_set.all()
     if len(groups)==0:
         return render_to_response('dashboard.html',{'uncreated':True},context_instance=RequestContext(request))
     else:
@@ -80,7 +83,7 @@ def create_user(request):
         return HttpResponseServerError("password does not match")
 
     user = User.objects.create_user(email, email, pw);
-    django_user = Users(user=user, university="UPenn", phone_number=1112223333)
+    django_user = Users(user=user, university="UPenn", phone_number=1112223333, preferred_contact_method=1)
     django_user.save()
     #ring_user = Users(user=django_user) # what is the purpose of this line?
 
@@ -100,8 +103,12 @@ def create_group(request):
     django_group = Groups(group_name=group_name)
     django_group.save()
     django_group.users.add(user)
+    django_group.save()
 
-    return render_to_response('success.html', context_instance=RequestContext(request))
+    groups = user.user_set.all()
+    data = [{'name':group.group_name} for group in groups]
+    response_json = simplejson.dumps(data)
+    return render_to_response('dashboard.html',{'groups':data},context_instance=RequestContext(request))
 
 def show_docs(request):
     if request.method != 'GET':
