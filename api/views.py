@@ -1,7 +1,7 @@
 # Create your views here.
 
 import httplib2
-from .models import Users, Groups
+from .models import Users, Groups, Messages
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
@@ -9,6 +9,7 @@ from django.http import HttpResponse, Http404, HttpResponseServerError, HttpResp
 from django.shortcuts import render_to_response
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template import RequestContext
+import datetime
 import json as simplejson
 import social_auth.backends.google as google_auth
 
@@ -86,7 +87,7 @@ def create_user(request):
     ring_user = Users(user=user, university="UPenn", phone_number=1112223333, preferred_contact_method=1)
     ring_user.save()
 
-    return render_to_response('success.html', context_instance=RequestContext(request))
+    return HttpResponseRedirect("/dashboard/")
 
 def create_group(request):
     if request.method != 'POST':
@@ -115,10 +116,11 @@ def group(request):
 
     group_id = request.GET['group_id']
     group = Groups.objects.get(group_id=group_id)
+    request.session.__setitem__('group_id', group_id)
     return render_to_response('group-home.html',{'group':group}, context_instance=RequestContext(request))
 
 def add_user_to_group(request):
-    group_id = request.GET['group_id']
+    group_id = request.session.get('group_id')
     group = Groups.objects.get(group_id=group_id)
     new_member_email = request.GET['new_member_email']
     try:
@@ -130,7 +132,28 @@ def add_user_to_group(request):
         ring_user.save()
     group.users.add(ring_user)
     group.save()
-    return render_to_response('group-home.html',{'group':group}, context_instance=RequestContext(request))
+    return render_to_response('group-members.html',{'group':group}, context_instance=RequestContext(request))
+
+def group_members(request):
+    group_id = request.session.get('group_id')
+    group = Groups.objects.get(group_id=group_id)
+    return render_to_response('group-members.html', {'group':group},context_instance=RequestContext(request))
+
+def group_messages(request):
+    group_id = request.session.get('group_id')
+    group = Groups.objects.get(group_id=group_id)
+    messages = group.messages_set.all()
+    return render_to_response('group-messages.html', {'messages':messages},context_instance=RequestContext(request))
+
+def send_new_message(request):
+    group_id = request.session.get('group_id')
+    group = Groups.objects.get(group_id=group_id)
+    subject = request.GET['subject']
+    content = request.GET['content']
+    
+    message = Messages(sent=datetime.datetime.now(), subject=subject, content=content, group=group); #TODO: email/Twilio integration should also happen here
+    message.save()
+    return HttpResponseRedirect('/messages/')
 
 def show_docs(request):
     if request.method != 'GET':

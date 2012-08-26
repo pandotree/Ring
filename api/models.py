@@ -22,5 +22,6 @@ class Messages(models.Model):
 	sent = models.DateTimeField()
 	subject = models.TextField() #Not sure if we should limit subject line with CharField
 	content = models.TextField()
+	group = models.ForeignKey(Groups)
 
 #TODO VALIDATION
