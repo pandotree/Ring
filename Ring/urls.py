@@ -1,5 +1,4 @@
 from django.conf.urls import patterns, include, url
-
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
@@ -17,6 +16,12 @@ urlpatterns = patterns('',
     url(r'^messages/send_new_message?$','api.views.send_new_message'),
     url(r'', include('social_auth.urls')),
     url(r'^authenticated/$', 'api.views.show_docs'),
+    url(r'^sms/$', 'django_twilio.views.sms',{
+        'message': 'Yo!',
+        'to': '+15714816721',
+        'sender': '+15714827875',
+        'status_callback': '/sms/completed/',
+    }),
     # Examples:
     # url(r'^$', 'Ring.views.home', name='home'),
     # url(r'^Ring/', include('Ring.foo.urls')),

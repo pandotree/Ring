@@ -5,9 +5,9 @@ from .models import Users, Groups, Messages
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
+from django.core.mail import EmailMessage
 from django.http import HttpResponse, Http404, HttpResponseServerError, HttpResponseRedirect
-from django.shortcuts import render_to_response
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, render, redirect, render_to_response
 from django.template import RequestContext
 import datetime
 import json as simplejson
@@ -19,6 +19,8 @@ from oauth2client.client import OAuth2Credentials
 from oauth2client.client import AccessTokenCredentials
 from social_auth.models import UserSocialAuth
 from pprint import pprint
+
+from twilio.rest import TwilioRestClient
 
 def index(request):
     c = {}
@@ -49,10 +51,6 @@ def sign_in(request):
 
 # only called once user is logged in
 def dashboard(request):
-    """logged_in = request.session.get('logged_in', False)
-    if(not logged_in):
-        return HttpResponse("Please log in!") #find a partial that we can render, or maybe redirect to homepage
-    print(request)"""
     user_id = request.session.get('user_id')
     ring_user = Users.objects.get(user_id=user_id)
 
@@ -153,6 +151,15 @@ def send_new_message(request):
     
     message = Messages(sent=datetime.datetime.now(), subject=subject, content=content, group=group); #TODO: email/Twilio integration should also happen here
     message.save()
+    email = EmailMessage(subject, content, to=['gracewang92@gmail.com']) #TODO: change this to the actual users, obvs.
+    email.send()
+
+    twilio_acct_sid = 'AC426a046e4f6eac58a3f733e2cc1b0f6a'
+    twilio_auth_token = '1c59f69ee46da00b1a728ef43ba83ce6'
+    twilioclient = TwilioRestClient(twilio_acct_sid, twilio_auth_token)
+    sms = twilioclient.sms.messages.create(to='+15714816721', from_='+15714827875',body=content)
+    #from_ field is our Twilio number
+    # the actual sms received has "Sent from your Twilio trial account" prepended to the body 
     return HttpResponseRedirect('/messages/')
 
 def show_docs(request):
