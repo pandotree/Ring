@@ -123,10 +123,6 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
-# TWILIO_ACCOUNT_SID = 'AC426a046e4f6eac58a3f733e2cc1b0f6a'
-# TWILIO_AUTH_TOKEN = '1c59f69ee46da00b1a728ef43ba83ce6' 
-# TWILIO_DEFAULT_CALLERID = 'Ring app'
-
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -142,7 +138,6 @@ INSTALLED_APPS = (
     ###### put new projects below this line ######
     'api',
     'social_auth',
-#    'django_twilio',
 )
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.google.GoogleOAuth2Backend',
