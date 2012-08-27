@@ -5,6 +5,9 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
             type="text/javascript"></script>
 
+    <!-- embedly -->
+    <script src="http://scripts.embed.ly/jquery.embedly.min.js"></script>
+
     <!-- fancybox -->
     <script type="text/javascript"
                 src="../static/fancybox/jquery.fancybox.pack.js?v=2.0.6"></script>
@@ -30,6 +33,11 @@
             $("a#signup").fancybox();
             $(".hidden").click(function(){
                 $(this).css("display","block");
+            });
+            $('div.embedly').embedly({
+                maxWidth: 350,
+                method: 'after',
+                key:':1bf66f45eaea446a9514e4cd1d8ce4eb'
             });
         });
     </script>
