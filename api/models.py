@@ -18,10 +18,18 @@ class Groups(models.Model):
 	created = models.DateTimeField(auto_now=True)
 	users = models.ManyToManyField(Users, related_name="user_set") #TODO: rename to groups_set
 
-class Messages(models.Model):
-	sent = models.DateTimeField()
-	subject = models.TextField() #Not sure if we should limit subject line with CharField
-	content = models.TextField()
-	group = models.ForeignKey(Groups)
+class MessageThread(models.Model):
+    group = models.ForeignKey(Groups)
+    subject = models.TextField() #Not sure if we should limit subject line with CharField
+
+class Message(models.Model):
+    sent = models.DateTimeField()
+    #subject = models.TextField() #Not sure if we should limit subject line with CharField
+    content = models.TextField()
+    thread = models.ForeignKey(MessageThread)
+
+class PinnedItem(models.Model):
+    url = models.CharField(max_length=300) # is there a better way of representing this?
+    group = models.ForeignKey(Groups)
 
 #TODO VALIDATION

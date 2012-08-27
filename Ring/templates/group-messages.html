@@ -11,23 +11,29 @@
             <div class="row">
                 <div class="span8">
                     <strong><p> All messages that have been sent</p></strong>
-                    {{ number }}
-                    {{ null }}
-                    <table>
-                        <tr>
-                            <td>Subject</td>
-                            <td>Content</td>
-                            <td>Sent at</td>
-                        </tr>
-                        {% for message in messages %}
-                            <tr>
-                                <td> {{message.subject}} </td>
-                                <td> {{message.content}} </td>
-                                <td> {{message.sent}} </td>
-                            </tr>
-                        {% endfor %}
-                    </table>
-                    <strong><p> Send a new message</p></strong>
+                    <ul>
+                    {% for thread in threads %}
+                        <li> {{ thread.subject }} 
+                            <ul>
+                                {% for message in thread.message_set.all %}
+                                    <li>{{ message.content }}, Sent at: {{ message.sent }}</li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <strong><p> Add to this thread</p></strong>
+                        <form method="get" action="send_new_message"> <!--really hacky, change to a post form -->
+                            <input type="hidden" name="subject" value="{{thread.subject}}">
+                            <p>Message Body</p>
+                            <input type="text" name="content">
+                           <input type="submit" value="Send!">
+                        </form>
+                   {% endfor %}
+                    </ul>
+                    <!--<strong><p>Sorted messages</p></strong>
+                    {{ sorted_messages|unordered_list }}
+                    <strong><p>Threaded messages</p></strong>
+                   {{ threaded_messages|unordered_list }}-->
+                    <strong><p> Start a new thread</p></strong>
                     <form method="get" action="send_new_message"> <!--really hacky, change to a post form -->
                         <p>Subject</p>
                         <input type="text" name="subject">

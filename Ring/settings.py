@@ -138,6 +138,7 @@ INSTALLED_APPS = (
     ###### put new projects below this line ######
     'api',
     'social_auth',
+    'south',
 )
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.google.GoogleOAuth2Backend',

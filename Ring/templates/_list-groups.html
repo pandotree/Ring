@@ -1,12 +1,12 @@
 <div>
     <table>
-    {% for group in groups %}
         <tr>
             <td>Group name</td>
             <td>Time of creation</td>
             <td>Group id</td>
             <td>Group home page</td>
         </tr>
+   {% for group in groups %}
         <tr>
             <td>{{ group.group_name }} </td>
             <td>{{ group.created }} </td>

@@ -1,7 +1,6 @@
 # Create your views here.
 
-import httplib2
-from .models import Users, Groups, Messages
+from .models import Users, Groups, MessageThread, Message, PinnedItem
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
@@ -9,18 +8,21 @@ from django.core.mail import EmailMessage
 from django.http import HttpResponse, Http404, HttpResponseServerError, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect, render_to_response
 from django.template import RequestContext
-import datetime
-import json as simplejson
-import social_auth.backends.google as google_auth
 
-from social_auth import __version__ as version
 from apiclient.discovery import build
+from bs4 import BeautifulSoup # an HTML parser
+from itertools import groupby
 from oauth2client.client import OAuth2Credentials
 from oauth2client.client import AccessTokenCredentials
-from social_auth.models import UserSocialAuth
 from pprint import pprint
-
+from social_auth import __version__ as version
+import social_auth.backends.google as google_auth
+from social_auth.models import UserSocialAuth
 from twilio.rest import TwilioRestClient
+
+import datetime
+import httplib2
+import urllib2
 
 def index(request):
     c = {}
@@ -58,8 +60,6 @@ def dashboard(request):
     if len(groups)==0:
         return render_to_response('dashboard.html',{'uncreated':True},context_instance=RequestContext(request))
     else:
-        data = [{'name':group.group_name} for group in groups]
-        response_json = simplejson.dumps(data)
         return render_to_response('dashboard.html',{'uncreated':False,'groups':groups},context_instance=RequestContext(request))
     
 def create_user(request):
@@ -117,6 +117,7 @@ def group(request):
     request.session.__setitem__('group_id', group_id)
     return render_to_response('group-home.html',{'group':group}, context_instance=RequestContext(request))
 
+""" Members """
 def add_user_to_group(request):
     group_id = request.session.get('group_id')
     group = Groups.objects.get(group_id=group_id)
@@ -137,21 +138,29 @@ def group_members(request):
     group = Groups.objects.get(group_id=group_id)
     return render_to_response('group-members.html', {'group':group},context_instance=RequestContext(request))
 
+""" Messages """
 def group_messages(request):
     group_id = request.session.get('group_id')
     group = Groups.objects.get(group_id=group_id)
-    messages = group.messages_set.all()
-    return render_to_response('group-messages.html', {'messages':messages},context_instance=RequestContext(request))
+    threads = group.messagethread_set.all()
+    all_threads = []
+    for thread in threads:
+        all_threads.append((thread.subject, thread.message_set.all()))
+    return render_to_response('group-messages.html', {'threads':threads},context_instance=RequestContext(request))
 
 def send_new_message(request):
     group_id = request.session.get('group_id')
     group = Groups.objects.get(group_id=group_id)
     subject = request.GET['subject']
     content = request.GET['content']
-    
-    message = Messages(sent=datetime.datetime.now(), subject=subject, content=content, group=group); #TODO: email/Twilio integration should also happen here
+    try:
+        thread = MessageThread.objects.get(subject=subject)
+    except MessageThread.DoesNotExist:
+        thread = MessageThread(group=group, subject=subject)
+        thread.save()
+    message = Message(sent=datetime.datetime.now(), content=content, thread=thread);
     message.save()
-    email = EmailMessage(subject, content, to=['gracewang92@gmail.com']) #TODO: change this to the actual users, obvs.
+    """email = EmailMessage(subject, content, to=['gracewang92@gmail.com']) #TODO: change this to the actual users, obvs.
     email.send()
 
     twilio_acct_sid = 'AC426a046e4f6eac58a3f733e2cc1b0f6a'
@@ -159,9 +168,41 @@ def send_new_message(request):
     twilioclient = TwilioRestClient(twilio_acct_sid, twilio_auth_token)
     sms = twilioclient.sms.messages.create(to='+15714816721', from_='+15714827875',body=content)
     #from_ field is our Twilio number
-    # the actual sms received has "Sent from your Twilio trial account" prepended to the body 
+    # the actual sms received has "Sent from your Twilio trial account" prepended to the body """
     return HttpResponseRedirect('/messages/')
 
+""" Bulletin Board """
+def group_bulletin(request):
+    group_id = request.session.get('group_id')
+    group = Groups.objects.get(group_id=group_id)
+    pinned_items = group.pinneditem_set.all()
+    #html_list = [__crawl_page(pinned_item.url) for pinned_item in pinned_items]
+    html_list = [pinned_item.url for pinned_item in pinned_items]
+    return render_to_response('group-bulletin.html', {'pinned_items':html_list},context_instance=RequestContext(request))
+   
+# private helper to pull images and synopsis from links like Facebook
+def __crawl_page(url):
+    usock = urllib2.urlopen(url)
+    html = usock.read() #html source
+    usock.close()
+    return html
+"""    parser = BeautifulSoup(html)
+    image_list = parser.findAll('link', rel='image_src')
+    if len(image_list) > 0:
+        return image_list[0]
+    else:
+        return html"""
+
+def pin_new_item(request):
+    group_id = request.session.get('group_id')
+    group = Groups.objects.get(group_id=group_id)
+    url = request.GET['url']
+    
+    pinned_item = PinnedItem(url=url, group=group); 
+    pinned_item.save()
+    return HttpResponseRedirect('/bulletin/')
+
+""" Documents """
 def show_docs(request):
     if request.method != 'GET':
         return HttpResponseServerError("Bad request type: " + request.method)
