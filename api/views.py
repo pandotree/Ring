@@ -160,7 +160,7 @@ def send_new_message(request):
         thread.save()
     message = Message(sent=datetime.datetime.now(), content=content, thread=thread);
     message.save()
-    """email = EmailMessage(subject, content, to=['gracewang92@gmail.com']) #TODO: change this to the actual users, obvs.
+    email = EmailMessage(subject, content, to=['gracewang92@gmail.com']) #TODO: change this to the actual users, obvs.
     email.send()
 
     twilio_acct_sid = 'AC426a046e4f6eac58a3f733e2cc1b0f6a'
@@ -168,7 +168,7 @@ def send_new_message(request):
     twilioclient = TwilioRestClient(twilio_acct_sid, twilio_auth_token)
     sms = twilioclient.sms.messages.create(to='+15714816721', from_='+15714827875',body=content)
     #from_ field is our Twilio number
-    # the actual sms received has "Sent from your Twilio trial account" prepended to the body """
+    # the actual sms received has "Sent from your Twilio trial account" prepended to the body 
     return HttpResponseRedirect('/messages/')
 
 """ Bulletin Board """
