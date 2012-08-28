@@ -28,6 +28,10 @@
 }
 
 /* Messages */
+.all-threads h3{
+    margin-bottom: 10px;
+}
+
 .all-threads ul{
     list-style-type: none;
     margin-left: 0;
@@ -35,16 +39,23 @@
 
 .thread ul{
     list-style-type: none;
-    margin-left: 0;
+    margin: 0;
 }
 
 .send-new-message{
     padding: 10px;
+    margin: 0;
     border-top: 1px solid #c0c0c0;
 }
 
 .new-message-content{
+    display: inline-block;
     width: 450px;
+    margin: 0 5px 0 0;
+}
+
+.char-count{
+    color: #909090;
 }
 
 .message{
@@ -66,9 +77,13 @@
     display: none;
 }
 
+.message-content{
+    padding: 5px 0;
+}
+
 .hide-content .message-snippet{
     display: inline-block;
-    color: #505050;
+    color: #606060;
 }
 .hide-content .message-content{
     display:none;

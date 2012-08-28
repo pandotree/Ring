@@ -10,7 +10,7 @@
         <div class="container">
             <div class="row">
                 <div class="span8 all-threads">
-                    <strong><p> All messages that have been sent</p></strong>
+                    <h3> Sent Messages</h3>
                     <ul>
                     {% for thread in threads %}
                         <li class='thread'> <h4>{{ thread.subject }} </h4>
@@ -28,20 +28,20 @@
                         <form class='send-new-message' method="get" action="send_new_message"> <!--really hacky, change to a post form -->
                             <input type="hidden" name="subject" value="{{thread.subject}}">
                             <textarea class='new-message-content' rows='3' name="content">Send a new message</textarea>
+                            <button class="btn btn-primary" type="submit" value="Send">Send</button>
                             <div class='char-count'>0 char</div>
                             <div class='char-warning'></div>
-                           <input type="submit" value="Send!">
                         </form>
                    {% endfor %}
                     </ul>
 
-                    <strong><p> Start a new thread</p></strong>
+                    <h3> Start a new thread</h3>
                     <form method="get" action="send_new_message"> <!--really hacky, change to a post form -->
-                        <p>Subject</p>
-                        <input type="text" name="subject">
-                        <p>Message Body</p>
-                        <textarea name="content"></textarea>
-                       <input type="submit" value="Send!">
+                        <input onfocus="this.value=''" type="text" name="subject" value="Subject"><br />
+                        <textarea class='new-message-content' rows='3' name="content">Send a new message</textarea>
+                        <button class="btn btn-primary" type="submit" value="Send">Send</button>
+                        <div class='char-count'>0 char</div>
+                        <div class='char-warning'></div>
                     </form>
                 </div>
             </div>

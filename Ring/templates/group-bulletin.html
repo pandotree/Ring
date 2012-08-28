@@ -10,29 +10,35 @@
         <div class="container embedly">
             <div class="row">
                 <div class="span10 pinned">
-                    <strong><p> All pinned items</p></strong>
+                    <h3> Pinned Items</h3>
                     <ul>
                         {% for embedly_item in embedly_items %}
                             <li class="span3">
                                 <div>
-                                    <a class="clear-left" href='{{ embedly_item.url }}'>{% if embedly_item.title %} {{ embedly_item.title }} {% else %} {{ embedly_item.url }}  {% endif %}</a>
-                                    <a class="clear-left" href='{{ embedly_item.provider_url }}'><em>{{ embedly_item.provider_name }}</em></a>
+                                    <a class="clear-left" href='{{ embedly_item.url }}'>
+                                        {% if embedly_item.title %} {{ embedly_item.title }} 
+                                        {% else %} {{ embedly_item.url }}  {% endif %}
+                                    </a>
+                                    <a class="clear-left" href='{{ embedly_item.provider_url }}'>
+                                        <em>{{ embedly_item.provider_name }}</em>
+                                    </a>
                                     <div class="clear-left">{{ embedly_item.description }}</div>
                                     <img class="embedly-thumb" src='{{ embedly_item.thumbnail_url }}' />
-                                    <p class='author'>Pinned by {{ embedly_item.author_name }} at {{ embedly_item.creation_date }}</p>
+                                    <p class='author'>
+                                        Pinned by {{ embedly_item.author_name }} 
+                                        at {{ embedly_item.creation_date }}
+                                    </p>
                                     <p> {{ embedly_item.caption }} </p>
                                 </div> 
                             </li>
                         {% endfor %}
                     </ul>
                     <div class="pin-new-item">
-                        <strong><p> Pin a new item</p></strong>
+                        <h3> Pin a new item</h3>
                         <form method="get" action="pin_new_item"> <!--really hacky, change to a post form -->
-                            <p>Link</p>
-                            <input type="text" name="url"> <br />
-                            <p>Caption</p>
-                            <textarea name="caption"></textarea>
-                            <input type="submit" value="Add!">
+                            <input onfocus="this.value=''" type="text" name="url" value="Link"> <br />
+                            <textarea class='new-pin-caption' name="caption">Add a caption</textarea>
+                            <button class='btn btn-primary' type="submit" value="Add">Pin</button>
                         </form>
                     </div>
                 </div>

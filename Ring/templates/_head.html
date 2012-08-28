@@ -46,7 +46,10 @@
                 $(this).toggleClass('hide-content');
             });
             // Gets rid of help text when sending a new message
-             $('.new-message-content').click(function(){
+            $('.new-pin-caption').click(function(){
+                this.innerHTML="";
+            });
+            $('.new-message-content').click(function(){
                 this.innerHTML="";
             });
             // Counts characters and alerts user when > 160
