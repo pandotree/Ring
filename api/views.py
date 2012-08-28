@@ -187,7 +187,11 @@ def group_bulletin(request):
     data = [] # to be returned in HttpResponse
     for pinned_item in pinned_items:
         r = __embedly(pinned_item.url) # calls helper function
-        dict={ 'url':pinned_item.url }
+        dict={ 
+            'url':pinned_item.url, 
+            'author_name':pinned_item.author_name, 
+            'creation_date':pinned_item.creation_date, 
+            'caption':pinned_item.caption }
         if r.status_code==200:
             content = json.loads(r.content)
             if 'title' in content:

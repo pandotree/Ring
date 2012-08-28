@@ -19,8 +19,8 @@
                                     <a class="clear-left" href='{{ embedly_item.provider_url }}'><em>{{ embedly_item.provider_name }}</em></a>
                                     <div class="clear-left">{{ embedly_item.description }}</div>
                                     <img class="embedly-thumb" src='{{ embedly_item.thumbnail_url }}' />
-                                    <p class='author'>Pinned by {{ pinned_item.author_name }}
-                                    <p> {{ pinned_item.caption }} </p>
+                                    <p class='author'>Pinned by {{ embedly_item.author_name }} at {{ embedly_item.creation_date }}</p>
+                                    <p> {{ embedly_item.caption }} </p>
                                 </div> 
                             </li>
                         {% endfor %}

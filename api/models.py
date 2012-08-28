@@ -31,6 +31,7 @@ class Message(models.Model):
     thread = models.ForeignKey(MessageThread)
 
 class PinnedItem(models.Model):
+    creation_date = models.DateTimeField(auto_now=True)
     url = models.CharField(max_length=300) # is there a better way of representing this?
     group = models.ForeignKey(Groups)
     author_id = models.IntegerField()
