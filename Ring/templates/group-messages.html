@@ -9,22 +9,27 @@
         {% include '_group-menu.html' %}
         <div class="container">
             <div class="row">
-                <div class="span8">
+                <div class="span8 all-threads">
                     <strong><p> All messages that have been sent</p></strong>
                     <ul>
                     {% for thread in threads %}
-                        <li> {{ thread.subject }} 
+                        <li class='thread'> <h4>{{ thread.subject }} </h4>
                             <ul>
                                 {% for message in thread.message_set.all %}
-                                    <li>{{ message.content }}, Sent at: {{ message.sent }}</li>
+                                    <li class='hide-content message'>
+                                        <div class='message-author'>{{ message.author_name }}</div>
+                                        <div class='message-snippet'>{{ message.snippet }}</div>
+                                        <div class='message-sent'>{{ message.sent }}</div>
+                                        <div class='message-content'>{{ message.content }}</div>
+                                    </li>
                                 {% endfor %}
                             </ul>
                         </li>
-                        <strong><p> Add to this thread</p></strong>
-                        <form method="get" action="send_new_message"> <!--really hacky, change to a post form -->
+                        <form class='send-new-message' method="get" action="send_new_message"> <!--really hacky, change to a post form -->
                             <input type="hidden" name="subject" value="{{thread.subject}}">
-                            <p>Message Body</p>
-                            <textarea name="content"></textarea>
+                            <textarea class='new-message-content' rows='3' name="content">Send a new message</textarea>
+                            <div class='char-count'>0 char</div>
+                            <div class='char-warning'></div>
                            <input type="submit" value="Send!">
                         </form>
                    {% endfor %}
@@ -33,9 +38,9 @@
                     <strong><p> Start a new thread</p></strong>
                     <form method="get" action="send_new_message"> <!--really hacky, change to a post form -->
                         <p>Subject</p>
-                        <textarea name="subject"></textarea>
+                        <input type="text" name="subject">
                         <p>Message Body</p>
-                        <input type="text" name="content">
+                        <textarea name="content"></textarea>
                        <input type="submit" value="Send!">
                     </form>
                 </div>

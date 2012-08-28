@@ -34,11 +34,35 @@
 
     <script>
         $(document).ready(function() {
+            // signup lightbox  on index.html
             $("a#signup").fancybox();
             $(".hidden").click(function(){
                 $(this).css("display","block");
             });
+            // Bulletin: nicer scrollbar
             $('.pinned li').mCustomScrollbar();
+            // Messages: hides full content until you click
+            $('.message').click(function(){
+                $(this).toggleClass('hide-content');
+            });
+            // Gets rid of help text when sending a new message
+             $('.new-message-content').click(function(){
+                this.innerHTML="";
+            });
+            // Counts characters and alerts user when > 160
+            $('.new-message-content').keyup(function(){
+                var numChars = this.value.length;
+                // gets divv with class 'char-count'
+                $(this).next().text(numChars + ' chars');
+                if (numChars > 160){
+                    // gets div with class 'char-warning'
+                    $(this).next().next().text(
+                        'Your message is over 160 characters. Group members who have SMS set as their preferred contact method may only receive a truncated version.');
+                }
+                else{
+                    $(this).next().next().text('');
+                }
+            });
         });
     </script>
 </head>

@@ -148,9 +148,11 @@ def group_messages(request):
     group_id = request.session.get('group_id')
     group = Groups.objects.get(group_id=group_id)
     threads = group.messagethread_set.all()
-    all_threads = []
+    threads_with_snippets = []
     for thread in threads:
-        all_threads.append((thread.subject, thread.message_set.all()))
+        for message in thread.message_set.all():
+            message.snippet = message.content[:60] # first 60 characters of string
+            message.save()
     return render_to_response('group-messages.html', {'threads':threads},context_instance=RequestContext(request))
 
 def send_new_message(request):
@@ -194,18 +196,8 @@ def group_bulletin(request):
             'caption':pinned_item.caption }
         if r.status_code==200:
             content = json.loads(r.content)
-            if 'title' in content:
-                dict['title']=content['title']
-            if 'provider_name' in content:
-                dict['provider_name']=content['provider_name']
-            if 'provider_url' in content:
-                dict['provider_url']=content['provider_url']
-            if 'description' in content:
-                dict['description']=content['description']
-            if 'thumbnail_url' in content:
-                dict['thumbnail_url']=content['thumbnail_url']
-            if 'type' in content and content['type']=='video':
-                dict['video']=content['html']
+            for k,v in content.items():
+                dict[k]=content[k]
 
         data.append(dict)
     return render_to_response('group-bulletin.html', {'embedly_items':data},context_instance=RequestContext(request))

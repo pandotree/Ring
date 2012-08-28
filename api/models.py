@@ -26,6 +26,7 @@ class Message(models.Model):
     sent = models.DateTimeField()
     #subject = models.TextField() #Not sure if we should limit subject line with CharField
     content = models.TextField()
+    snippet = models.TextField(null=True) #only filled in later, before sending messages to view
     author_id = models.IntegerField()
     author_name = models.CharField(max_length=64)
     thread = models.ForeignKey(MessageThread)

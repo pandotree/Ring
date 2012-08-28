@@ -1,19 +1,8 @@
-/* empty for now */
-
+/* Bulletin Board */
 .pinned ul{
     margin-left: 0;
 }
 
-/*.embed a{
-    display: block;
-}
-.embed{
-    /*display: none;
-    width: 200px;
-}
-.description{
-    display: block;
-}*/
 .pinned li{
     list-style-type: none;
     margin: 5px 10px 5px 0;
@@ -27,7 +16,7 @@
 .clear-left{
     display: block;
     clear: left;
-}
+} 
 
 .pin-new-item{
     clear: left;
@@ -36,4 +25,61 @@
 .embedly-thumb{
     margin-top: 10px;
     max-width: 190px;
+}
+
+/* Messages */
+.all-threads ul{
+    list-style-type: none;
+    margin-left: 0;
+}
+
+.thread ul{
+    list-style-type: none;
+    margin-left: 0;
+}
+
+.send-new-message{
+    padding: 10px;
+    border-top: 1px solid #c0c0c0;
+}
+
+.new-message-content{
+    width: 450px;
+}
+
+.message{
+    background: white;
+    border-top: 1px solid #c0c0c0;
+    padding: 2px 10px;
+}
+
+.message.hide-content{
+    background: #f0f0f0;
+    border-bottom: none;
+    /* h-offset v-offset blur-distance color */
+    /*-webkit-box-shadow: 0px 2px 2px #e0e0e0;
+       -moz-box-shadow: 0px 2px 2px #e0e0e0;
+            box-shadow: 0px 2px 2px #e0e0e0;*/
+}
+
+.message-snippet{
+    display: none;
+}
+
+.hide-content .message-snippet{
+    display: inline-block;
+    color: #505050;
+}
+.hide-content .message-content{
+    display:none;
+}
+
+.message-author{
+    font-weight: bold;
+    display: inline-block;
+}
+
+.message-sent{
+    display: inline-block;
+    float: right;
 }
