@@ -22,7 +22,12 @@ from twilio.rest import TwilioRestClient
 
 import datetime
 import httplib2
-import urllib2
+import requests
+import urllib
+
+# apparently this is good practice
+try: import simplejson as json
+except ImportError: import json
 
 def index(request):
     c = {}
@@ -149,6 +154,9 @@ def group_messages(request):
     return render_to_response('group-messages.html', {'threads':threads},context_instance=RequestContext(request))
 
 def send_new_message(request):
+    user_id = request.session.get('user_id')
+    ring_user = Users.objects.get(user_id=user_id)
+    username = ring_user.user.username
     group_id = request.session.get('group_id')
     group = Groups.objects.get(group_id=group_id)
     subject = request.GET['subject']
@@ -158,7 +166,7 @@ def send_new_message(request):
     except MessageThread.DoesNotExist:
         thread = MessageThread(group=group, subject=subject)
         thread.save()
-    message = Message(sent=datetime.datetime.now(), content=content, thread=thread);
+    message = Message(sent=datetime.datetime.now(), content=content, thread=thread, author_id=user_id, author_name=username);
     message.save()
     email = EmailMessage(subject, content, to=['gracewang92@gmail.com']) #TODO: change this to the actual users, obvs.
     email.send()
@@ -176,29 +184,50 @@ def group_bulletin(request):
     group_id = request.session.get('group_id')
     group = Groups.objects.get(group_id=group_id)
     pinned_items = group.pinneditem_set.all()
-    #html_list = [__crawl_page(pinned_item.url) for pinned_item in pinned_items]
-    html_list = [pinned_item.url for pinned_item in pinned_items]
-    return render_to_response('group-bulletin.html', {'pinned_items':html_list},context_instance=RequestContext(request))
+    data = [] # to be returned in HttpResponse
+    for pinned_item in pinned_items:
+        r = __embedly(pinned_item.url) # calls helper function
+        dict={ 'url':pinned_item.url }
+        if r.status_code==200:
+            content = json.loads(r.content)
+            if 'title' in content:
+                dict['title']=content['title']
+            if 'provider_name' in content:
+                dict['provider_name']=content['provider_name']
+            if 'provider_url' in content:
+                dict['provider_url']=content['provider_url']
+            if 'description' in content:
+                dict['description']=content['description']
+            if 'thumbnail_url' in content:
+                dict['thumbnail_url']=content['thumbnail_url']
+            if 'type' in content and content['type']=='video':
+                dict['video']=content['html']
+
+        data.append(dict)
+    return render_to_response('group-bulletin.html', {'embedly_items':data},context_instance=RequestContext(request))
    
-# private helper to pull images and synopsis from links like Facebook
-def __crawl_page(url):
-    usock = urllib2.urlopen(url)
-    html = usock.read() #html source
-    usock.close()
-    return html
-"""    parser = BeautifulSoup(html)
-    image_list = parser.findAll('link', rel='image_src')
-    if len(image_list) > 0:
-        return image_list[0]
-    else:
-        return html"""
+# private helper that uses the Embed.ly API to pull images and synopsis from links, similar to Facebook
+# uh...so I did all this work and then found out there's an embedly-python repo on Github, may refactor later <_<
+def __embedly(url):
+    data = {
+        'url':urllib.quote(url), # escapes special characters
+        'words':20, # number of words that will be returned in the description (default 50)
+        'key':'1bf66f45eaea446a9514e4cd1d8ce4eb' # Embed.ly key
+    }
+    query = '&'.join(['%s=%s' % (k,v) for k,v in data.items()])
+    fetch_url = 'http://api.embed.ly/1/oembed?%s' % query
+    r = requests.get(fetch_url) # uses the requests lib
+    return r
 
 def pin_new_item(request):
+    user_id = request.session.get('user_id')
+    ring_user = Users.objects.get(user_id=user_id)
+    username = ring_user.user.username
     group_id = request.session.get('group_id')
     group = Groups.objects.get(group_id=group_id)
     url = request.GET['url']
-    
-    pinned_item = PinnedItem(url=url, group=group); 
+    caption = request.GET['caption'] 
+    pinned_item = PinnedItem(url=url, group=group, author_id=user_id, author_name=username, caption=caption); 
     pinned_item.save()
     return HttpResponseRedirect('/bulletin/')
 

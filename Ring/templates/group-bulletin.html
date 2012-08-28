@@ -9,22 +9,32 @@
         {% include '_group-menu.html' %}
         <div class="container embedly">
             <div class="row">
-                <div class="span8 pinned">
+                <div class="span10 pinned">
                     <strong><p> All pinned items</p></strong>
                     <ul>
-                        {% for pinned_item in pinned_items %}
-                            <li>
-                                <div><a href='{{ pinned_item }}'></a></div>
+                        {% for embedly_item in embedly_items %}
+                            <li class="span3">
+                                <div>
+                                    <a class="clear-left" href='{{ embedly_item.url }}'>{% if embedly_item.title %} {{ embedly_item.title }} {% else %} {{ embedly_item.url }}  {% endif %}</a>
+                                    <a class="clear-left" href='{{ embedly_item.provider_url }}'><em>{{ embedly_item.provider_name }}</em></a>
+                                    <div class="clear-left">{{ embedly_item.description }}</div>
+                                    <img class="embedly-thumb" src='{{ embedly_item.thumbnail_url }}' />
+                                    <p class='author'>Pinned by {{ pinned_item.author_name }}
+                                    <p> {{ pinned_item.caption }} </p>
+                                </div> 
                             </li>
                         {% endfor %}
                     </ul>
-                    <strong><p> Pin a new item</p></strong>
-                    <form method="get" action="pin_new_item"> <!--really hacky, change to a post form -->
-                        <p>Link</p>
-                        <input type="text" name="url">
-                        <!--<div class="embedly"></div>-->
-                        <input type="submit" value="Add!">
-                    </form>
+                    <div class="pin-new-item">
+                        <strong><p> Pin a new item</p></strong>
+                        <form method="get" action="pin_new_item"> <!--really hacky, change to a post form -->
+                            <p>Link</p>
+                            <input type="text" name="url"> <br />
+                            <p>Caption</p>
+                            <textarea name="caption"></textarea>
+                            <input type="submit" value="Add!">
+                        </form>
+                    </div>
                 </div>
             </div>
             {% include '_footer.html' %}

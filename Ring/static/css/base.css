@@ -1,5 +1,39 @@
 /* empty for now */
 
-.pinned{
-    width: 400;
+.pinned ul{
+    margin-left: 0;
+}
+
+/*.embed a{
+    display: block;
+}
+.embed{
+    /*display: none;
+    width: 200px;
+}
+.description{
+    display: block;
+}*/
+.pinned li{
+    list-style-type: none;
+    margin: 5px 10px 5px 0;
+    height: 200px;
+    display: inline-block;
+    padding: 10px;
+    background: #e0e0e0;
+    overflow: auto;
+}
+
+.clear-left{
+    display: block;
+    clear: left;
+}
+
+.pin-new-item{
+    clear: left;
+}
+
+.embedly-thumb{
+    margin-top: 10px;
+    max-width: 190px;
 }

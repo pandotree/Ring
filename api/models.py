@@ -26,10 +26,15 @@ class Message(models.Model):
     sent = models.DateTimeField()
     #subject = models.TextField() #Not sure if we should limit subject line with CharField
     content = models.TextField()
+    author_id = models.IntegerField()
+    author_name = models.CharField(max_length=64)
     thread = models.ForeignKey(MessageThread)
 
 class PinnedItem(models.Model):
     url = models.CharField(max_length=300) # is there a better way of representing this?
     group = models.ForeignKey(Groups)
+    author_id = models.IntegerField()
+    author_name = models.CharField(max_length=64)
+    caption = models.TextField()
 
 #TODO VALIDATION

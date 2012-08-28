@@ -24,7 +24,7 @@
                         <form method="get" action="send_new_message"> <!--really hacky, change to a post form -->
                             <input type="hidden" name="subject" value="{{thread.subject}}">
                             <p>Message Body</p>
-                            <input type="text" name="content">
+                            <textarea name="content"></textarea>
                            <input type="submit" value="Send!">
                         </form>
                    {% endfor %}
@@ -33,7 +33,7 @@
                     <strong><p> Start a new thread</p></strong>
                     <form method="get" action="send_new_message"> <!--really hacky, change to a post form -->
                         <p>Subject</p>
-                        <input type="text" name="subject">
+                        <textarea name="subject"></textarea>
                         <p>Message Body</p>
                         <input type="text" name="content">
                        <input type="submit" value="Send!">
