@@ -1,6 +1,6 @@
 # Create your views here.
 
-from .models import RichUser, Group, MessageThread, Message, PinnedItem
+from .models import RichUser, Group, MessageThread, Message, PinnedItem, GroupCode
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
@@ -20,6 +20,8 @@ import social_auth.backends.google as google_auth
 from social_auth.models import UserSocialAuth
 from twilio.rest import TwilioRestClient
 
+import os
+import string
 import datetime
 import httplib2
 import requests
@@ -33,6 +35,11 @@ def index(request):
     c = {}
     c.update(csrf(request))
     return render_to_response('index.html',context_instance=RequestContext(request)) #what does context_instance do?
+
+def group_signup(request):
+    c = {}
+    c.update(csrf(request))
+    return render_to_response('group-signup.html',context_instance=RequestContext(request)) 
 
 def sign_in(request):
     if request.method != 'POST':
@@ -66,8 +73,8 @@ def dashboard(request):
         return render_to_response('dashboard.html',{'uncreated':True},context_instance=RequestContext(request))
     else:
         return render_to_response('dashboard.html',{'uncreated':False,'groups':groups},context_instance=RequestContext(request))
-    
-def create_user(request):
+
+def _create_user(request):
     if request.method != 'POST':
         return HttpResponseServerError("Bad request type: " + request.method)
 
@@ -92,6 +99,22 @@ def create_user(request):
 
     request.session.__setitem__('logged_in', True)
     request.session.__setitem__('user_id', ring_user.user_id)
+    return ring_user
+
+def create_user(request):
+    
+    if 'group_code' in request.POST:
+        username = request.POST['email']
+        group_code = request.POST['group_code']
+        try:
+            rich_user = _create_user(request)
+            _add_user(rich_user, group_code)
+            return HttpResponseRedirect("/dashboard/")
+
+        except:
+           return HttpResponseServerError("Error processing your input. Please try again.")  
+
+    _create_user(request)
     return HttpResponseRedirect("/dashboard/")
 
 def create_group(request):
@@ -127,7 +150,20 @@ def group(request):
         'group-home.html',{'group':group}, context_instance=RequestContext(request))
 
 """ Members """
+
+def _add_user(rich_user, group_code):
+    encoded_group = GroupCode.objects.get(group_code = group_code)
+    group = encoded_group.group
+    group.users.add(rich_user)
+    
+    #setting the code to "used" status
+    encoded_group.used = True
+    encoded_group.save()
+
+    group.save()
+
 def add_user_to_group(request):
+
     group_id = request.session.get('group_id')
     group = Group.objects.get(group_id=group_id)
     new_member_email = request.GET['new_member_email']
@@ -135,11 +171,21 @@ def add_user_to_group(request):
         django_user = User.objects.get(username=new_member_email)
         ring_user = RichUser.objects.get(user=django_user)
     except User.DoesNotExist:
-        django_user = User.objects.create_user(new_member_email, new_member_email, "temp"); #TODO: send an email to the user telling them about their new account and temp password
-        ring_user = RichUser(user=django_user)
-        ring_user.save()
-    group.users.add(ring_user)
-    group.save()
+        
+        stringset = string.ascii_letters+string.digits
+        code = ''.join([stringset[i%len(stringset)] \
+                for i in [ord(x) for x in os.urandom(6)]])
+        group_code = GroupCode(group_code = code, group=group, used=False)
+        group_code.save()
+        
+        subject = "You've Been Invited to Ring!"
+        content = "Please create an account at the following link: http://54.245.118.39:8000/group_signup." \
+        +  "\n\n Please use the following code when signing up: " + code + "!"
+        
+        #TODO: change this to the actual users, obvs.
+        email = EmailMessage(subject, content, to=['franklin.z.yang@gmail.com']) 
+        email.send()
+
     return render_to_response(
         'group-members.html',{'group':group}, context_instance=RequestContext(request))
 
@@ -178,7 +224,8 @@ def send_new_message(request):
     message = Message(sent=datetime.datetime.now(), 
         content=content, thread=thread, author_id=user_id, author_name=username);
     message.save()
-    email = EmailMessage(subject, content, to=['gracewang92@gmail.com']) #TODO: change this to the actual users, obvs.
+    #TODO: change this to the actual users, obvs.
+    email = EmailMessage(subject, content, to=['franklin.z.yang@gmail.com']) 
     email.send()
 
     twilio_acct_sid = 'AC426a046e4f6eac58a3f733e2cc1b0f6a'

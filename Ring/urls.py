@@ -5,6 +5,7 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
     url(r'^/?$','api.views.index'),
+    url(r'^group_signup?$','api.views.group_signup'),
     url(r'^dashboard/?$','api.views.dashboard'),
     url(r'^sign_in/?$','api.views.sign_in'),
     url(r'^create_user/?$','api.views.create_user'),
